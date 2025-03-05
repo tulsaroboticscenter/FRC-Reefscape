@@ -1,3 +1,7 @@
-Pulled over previous project
+Deleted Pneumatics Code
 
-Source: https://github.com/ToefursTitans9462/Pneumatics_Testing
+Changes:
+- Deleted PneumaticsSubsystem
+- Deleted PneumaticsCommand
+- Deleted PneumaticsConstants
+- Added basic climb constants

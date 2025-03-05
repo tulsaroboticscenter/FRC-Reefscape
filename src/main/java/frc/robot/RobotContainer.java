@@ -9,16 +9,10 @@ import frc.robot.commands.Autos;
 
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.PneumaticsSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 
 /**
@@ -30,23 +24,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
 
   private static final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-
-  // Pneumatics things
-  public static final Compressor m_Compressor = new Compressor(PneumaticsModuleType.REVPH);
-  public static final DoubleSolenoid m_RightClimbPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
-  public static final DoubleSolenoid m_LeftClimbPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
-
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    configurePneumatics();
 
     // GUI.getInstance().setDefaultCommand(new GuiComand(GUI.getInstance()));
 
@@ -69,16 +53,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.a().onTrue(new InstantCommand(() -> m_pneumaticsSubsystem.extendClimb()));
-    m_driverController.x().onTrue(new InstantCommand(() -> m_pneumaticsSubsystem.retractClimb()));
     // m_driverController.y().onTrue(new InstantCommand(() -> {}));
 
-  }
-
-  private void configurePneumatics() {
-    m_RightClimbPiston.set(Value.kOff);
-    m_LeftClimbPiston.set(Value.kOff);
-    m_Compressor.enableAnalog(Constants.Pneumatics.kCompressorActivationPressure, Constants.Pneumatics.kCompressorDeactivationPressure);
   }
 
   /**

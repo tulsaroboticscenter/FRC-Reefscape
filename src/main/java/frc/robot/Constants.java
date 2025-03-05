@@ -7,11 +7,13 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  public final class Pneumatics {
-    /** PSI - The pressure the compressor's sensor must read before it turns on */
-    public static final int kCompressorActivationPressure = 70;
-    /** PSI - The pressure the compressor's sensor must read before it turns off */
-    public static final int kCompressorDeactivationPressure = 120;
-  }
+  public final class ClimbConstants {
+    /** This is the difference between the angle of the fully deployed cams and the angle of the fully retracted cams. */
+    public static final double totalCamTravelAngle = 120;
+    /** This is how many revolutions the cams make for one revolution of the motors. */
+    public static final double gearRatio = 1/80;
+    /** In amps, this is the current the motors should cut off at to avoid damaging the frame. */
+    public static final double cutoffCurrent = 1.0;
 
+  }
 }
