@@ -1,7 +1,6 @@
 Deleted Pneumatics Code
 
 Changes:
-- Deleted PneumaticsSubsystem
-- Deleted PneumaticsCommand
-- Deleted PneumaticsConstants
-- Added basic climb constants
+- Added ClimbCamSubsystem
+- Updated ClimbSubsystem to use the cams
+- Removed Constants.OperatorConstants
