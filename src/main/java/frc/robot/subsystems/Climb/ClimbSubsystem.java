@@ -18,8 +18,8 @@ public class ClimbSubsystem extends SubsystemBase {
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {}
 
-  public ClimbCamSubsystem rightCam = new ClimbCamSubsystem(0, false, 0, 0);
-  public ClimbCamSubsystem leftCam = new ClimbCamSubsystem(0, false, 0, 0);
+  public ClimbCamSubsystem rightCam = new ClimbCamSubsystem(21, false, 0);
+  public ClimbCamSubsystem leftCam = new ClimbCamSubsystem(26, false, 0);
 
 
   /**
@@ -40,21 +40,24 @@ public class ClimbSubsystem extends SubsystemBase {
         
 
   public void toggleClimb() {
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {rightCam.toggleCam();}));
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {leftCam.toggleCam();}));
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { rightCam.toggleCam(); }));
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { leftCam.toggleCam(); }));
   }
 
   public void raiseClimb() {
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {rightCam.raiseCam();}));
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {leftCam.raiseCam();})); }
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { rightCam.raiseCam(); }));
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { leftCam.raiseCam(); })); 
+  }
 
   public void lowerClimb() {
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {rightCam.lowerCam();}));
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {leftCam.lowerCam();}));}
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { rightCam.lowerCam(); }));
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { leftCam.lowerCam(); }));
+  }
   
   public void zeroClimb() {
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {rightCam.zeroCam();}));
-    CommandScheduler.getInstance().schedule(new InstantCommand(() -> {leftCam.zeroCam();}));}
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { rightCam.zeroCam(); }));
+    CommandScheduler.getInstance().schedule(new InstantCommand(() -> { leftCam.zeroCam(); }));
+  }
 
 
   /**
