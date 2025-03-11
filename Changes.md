@@ -1,8 +1,5 @@
-Removed Upper Limit Switch
+Fixed Cam Zeroing Bug
 
 Changes:
-- Removed all references to the upper limit switch. 
-  Now the "up" position of the cam is controlled by a constant in the Constants.java file.
-- Added cam speed control
-- Added Cam Motor CAN IDs
-- Changed the control mode of the motors to use the built in SparkClosedLoopControl
+- Fixed a bug where the cams would not zero correctly
+- Fixed a bug where the cams would not obey the speed settings specified by the Constants.java file

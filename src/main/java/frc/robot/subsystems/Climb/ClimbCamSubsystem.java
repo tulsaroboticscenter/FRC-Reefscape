@@ -6,7 +6,6 @@ package frc.robot.subsystems.Climb;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.RelativeEncoder;
@@ -104,7 +103,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public void raiseCam() {
     m_isDown = false;
     m_closedLoopController.setReference(
-      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * -m_direction) + m_zeroPoint, 
+      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * -m_direction * Constants.ClimbConstants.camRaiseSpeed) + m_zeroPoint, 
       ControlType.kPosition, 
       ClosedLoopSlot.kSlot0);
     // This will be set to true although the motor has not yet reached that position.
@@ -114,7 +113,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public void lowerCam() {
     m_isUp = false;
     m_closedLoopController.setReference(
-      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * m_direction) - m_zeroPoint, 
+      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * m_direction * Constants.ClimbConstants.camLowerSpeed) - m_zeroPoint, 
       ControlType.kPosition, 
       ClosedLoopSlot.kSlot0);
     // This will be set to true although the motor has not yet reached that position.
@@ -122,15 +121,20 @@ public class ClimbCamSubsystem extends SubsystemBase {
   }
   
   public void zeroCam() {
+    // Prevent starting zeroing if already in progress
+    if (m_isMoving) 
+      return;  
+
     m_isMoving = true;
     m_closedLoopController.setReference(0.1 * m_direction, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+    // Once the limit switch activates, continue.
     new WaitUntilCommand(m_lowerLimit::get).andThen(() -> {
       m_closedLoopController.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
-      m_isMoving = false;
+      m_zeroPoint = m_encoder.getPosition();
       m_isDown = true;
+      m_isMoving = false;
+      raiseCam();
     }).schedule();
-
-    m_zeroPoint = m_encoder.getPosition();
   }
 
   public boolean isMoving() { return m_isMoving; }
