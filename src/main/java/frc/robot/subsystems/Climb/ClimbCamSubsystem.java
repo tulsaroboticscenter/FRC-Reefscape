@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -20,6 +21,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 
 import frc.robot.Constants;
 import frc.robot.MotorConfigurations;
+import frc.robot.Constants.ClimbConstants;
 
 public class ClimbCamSubsystem extends SubsystemBase {
 
@@ -31,7 +33,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   /** This is the limit switch. When true, the cam is all the way down. */
   private final DigitalInput m_lowerLimit;
 
-
+  // State variables for the cam
   private boolean m_isDown = false;
   private boolean m_isUp = false;
   private boolean m_isMoving = false;
@@ -40,7 +42,9 @@ public class ClimbCamSubsystem extends SubsystemBase {
   private double m_zeroPoint = 0;
 
   /** "Forward" should mean that the cam is moving down and trying to lift the robot. */
-  public ClimbCamSubsystem(int motorCANID, boolean inverted, int lowerLimitChannel) {
+  public ClimbCamSubsystem(int motorCANID, int lowerLimitChannel, boolean inverted) {
+
+    MotorConfigurations.init();
     
     m_lowerLimit = new DigitalInput(lowerLimitChannel);
 
@@ -57,23 +61,6 @@ public class ClimbCamSubsystem extends SubsystemBase {
     m_motor.configure(m_configuration, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters); 
   }
 
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  /* 
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          // One time actin goes here.
-        });
-  }
-  */
-
   public void toggleCam() {
     if (m_isDown)
       raiseCam();
@@ -83,28 +70,23 @@ public class ClimbCamSubsystem extends SubsystemBase {
 
   public void raiseCam() {
     // Angle is in degrees, so we convert to rotations and convert that using the gear ratio.
-    double target = (Constants.ClimbConstants.totalCamTravelAngle / 360)/ Constants.ClimbConstants.gearRatio;
-    //TODO Make it obey the max speed setting
+    double target = (Constants.ClimbConstants.totalCamTravelAngle / 360) / Constants.ClimbConstants.gearRatio;
+    //TODO Make it obey the max speed setting. That can probably be done with the volage that is added on after all the calculations
     m_isDown = false;
-    m_closedLoopController.setReference(
-      target + m_zeroPoint, 
-      ControlType.kPosition, 
-      ClosedLoopSlot.kSlot0);
-    // This will be set to true although the motor has not yet reached that position.
+    m_closedLoopController.setReference(m_zeroPoint - target, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    //FIXME This will be set to true although the motor has not yet reached that position.
     m_isUp = true;
   }
 
+  //FIXME Make like raise cam function
   public void lowerCam() {
     m_isUp = false;
-    m_closedLoopController.setReference(
-      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * Constants.ClimbConstants.camLowerSpeed) - m_zeroPoint, 
-      ControlType.kPosition, 
-      ClosedLoopSlot.kSlot0);
-    // This will be set to true although the motor has not yet reached that position.
+    m_closedLoopController.setReference(m_zeroPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    //FIXME This will be set to true although the motor has not yet reached that position.
     m_isDown = true;
   }
   
-//TODO Invextigate MaxMotion for velocity based control
+//TODO Investigate MaxMotion for velocity based control
   public void zeroCam() {
     // Prevent starting zeroing if already in progress
     if (m_isMoving) 
@@ -112,14 +94,15 @@ public class ClimbCamSubsystem extends SubsystemBase {
 
     m_isMoving = true;
 
-    // Make it velocity controlled and set the reference to 10% speed.
-    m_closedLoopController.setReference(0.1, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+    // Make it velocity controlled and set the reference to the zeroing speed.
+    m_closedLoopController.setReference(ClimbConstants.camZeroSpeed, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     // Once the limit switch activates, continue.
     new WaitUntilCommand(m_lowerLimit::get).andThen(() -> {
       m_closedLoopController.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
       m_zeroPoint = m_encoder.getPosition();
       m_isDown = true;
       m_isMoving = false;
+      m_isUp = false;
       raiseCam();
     }).schedule();
   }
@@ -127,26 +110,4 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public boolean isMoving() { return m_isMoving; }
   public boolean isDown() { return m_isDown; }
   public boolean isUp() { return m_isUp; }
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  /*
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
- */
 }

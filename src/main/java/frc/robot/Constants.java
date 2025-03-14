@@ -13,15 +13,18 @@ public final class Constants {
 
 
   public static final class ClimbConstants {
+    /** Determine if the motors are inverted */
+    public static final boolean leftCamInverted = false, rightCamInverted = false;
+
     /** This is the difference between the angle of the fully deployed cams and the angle of the fully retracted cams. */
     public static final double totalCamTravelAngle = 120;
-    /** This is how many revolutions the cams make for one revolution of the motors. */
-    public static final double gearRatio = 1/80;
+    /** This is how many revolutions the cam makes for one revolution of the motor. */
+    public static final double gearRatio = 1.0/80;
 
-    /** Between 0 and 1. This is the speed the cam motors should raise at. */
+    /** EXPERIMENTAL Between 0 and 1. This is the speed the cam motors should raise at. */
     public static final double camRaiseSpeed = 1.0;
-    /** Between 0 and 1. This is the speed the cam motors should lower at. */
-    public static final double camLowerSpeed = 0.7;
+    /** EXPERIMENTAL Between 0 and 1. This is the speed the cam motors should lower at. */
+    public static final double camLowerSpeed = 1.0;
     /** Between 0 and 1. This is the speed the cam motors will run while zeroing. */
     public static final double camZeroSpeed = 0.1;
 

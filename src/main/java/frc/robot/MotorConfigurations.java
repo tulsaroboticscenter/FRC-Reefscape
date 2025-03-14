@@ -1,25 +1,28 @@
 package frc.robot;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+
+import frc.robot.Constants.ClimbConstants;
+import frc.robot.Constants.Electrical;
+import frc.robot.subsystems.Climb.ClimbCamSubsystem;
 
 public final class MotorConfigurations {
   /** Position PID is in slot 0 and velocity PID is in slot 1 */
   public static final SparkMaxConfig climbCamMotorConfig = new SparkMaxConfig();
 
   private static MotorConfigurations m_instance;
+  /** Initialize the motor configurations. If this isn't done, default configurations will be applied. */
   public static void init() {
     if (m_instance == null) {
       m_instance = new MotorConfigurations();
     }
     
     // We set the SparkMax controllers to use NEO Brushless Motors using the REV Hardware client, so we won't adjust the things here.
-    climbCamMotorConfig.encoder.positionConversionFactor(1).velocityConversionFactor(1);
+    climbCamMotorConfig.encoder
+      .positionConversionFactor(1).velocityConversionFactor(1);
 
     climbCamMotorConfig.closedLoop
       // Set the feedback sensor as the primary encoder
@@ -37,6 +40,7 @@ public final class MotorConfigurations {
       .outputRange(-1, 1);
 
     climbCamMotorConfig
-      .idleMode(IdleMode.kBrake);
+      .idleMode(IdleMode.kBrake)
+      .smartCurrentLimit(Electrical.NEOCurrentLimit);
   }
 }
