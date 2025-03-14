@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Climb.ClimbSubsystem;
+
+import frc.robot.MotorConfigurations;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,25 +24,27 @@ import edu.wpi.first.wpilibj.XboxController;
 
 
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
 
-  private static final XboxController m_driverController = new XboxController(0);
+  private static final XboxController m_driverController = new XboxController(OperatorConstants.driverControllerPort);
 
   // Driver inputs
-  private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, OperatorConstants.toggleClimb);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    MotorConfigurations.init();
     // Configure the trigger bindings
     configureBindings();
     // Zero the climb
     CommandScheduler.getInstance().schedule(new InstantCommand(() -> {m_ClimbSubsystem.zeroClimb();}));
-
-
   }
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -59,9 +63,10 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    // m_driverController.y().onTrue(new InstantCommand(() -> {}));
+    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.y().onTrue(new InstantCommand(() -> {}));
     */
+
     /** Toggle the climb */
     toggleClimbButton.onTrue(new InstantCommand(() -> {m_ClimbSubsystem.toggleClimb();}));
   }

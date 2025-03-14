@@ -9,18 +9,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
 
-import frc.robot.subsystems.Climb.ClimbCamSubsystem;
+import frc.robot.Constants.DeviceID;;
 
 public class ClimbSubsystem extends SubsystemBase {
+
+  public ClimbCamSubsystem rightCam, leftCam;
+
   /** Creates a new ClimbSubsystem. */
-  public ClimbSubsystem() {}
+  public ClimbSubsystem() {
 
-  public ClimbCamSubsystem rightCam = new ClimbCamSubsystem(21, false, 0);
-  public ClimbCamSubsystem leftCam = new ClimbCamSubsystem(26, false, 0);
-
+  rightCam = new ClimbCamSubsystem(DeviceID.rightClimbCamCAN, false, DeviceID.rightClimbCamLimitSwitchDIO);
+  leftCam = new ClimbCamSubsystem(DeviceID.leftClimbCamCAN, false, DeviceID.leftClimbCamLimitSwitchDIO);
+}
 
   /**
    * Example command factory method.

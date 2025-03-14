@@ -10,70 +10,51 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
 
 import frc.robot.Constants;
+import frc.robot.MotorConfigurations;
 
 public class ClimbCamSubsystem extends SubsystemBase {
 
   private final SparkMax m_motor;
-  private final SparkMaxConfig m_config;
   private final SparkClosedLoopController m_closedLoopController;
+  private final SparkMaxConfig m_configuration;
   private final RelativeEncoder m_encoder;
 
+  /** This is the limit switch. When true, the cam is all the way down. */
   private final DigitalInput m_lowerLimit;
+
 
   private boolean m_isDown = false;
   private boolean m_isUp = false;
   private boolean m_isMoving = false;
 
-  /** Measured in degrees. An angle of 0 means the cam is all the way down. */
+  /** Measured in rotations. An angle of 0 means the cam is all the way down. */
   private double m_zeroPoint = 0;
-
-  private double m_direction = 0;
 
   /** "Forward" should mean that the cam is moving down and trying to lift the robot. */
   public ClimbCamSubsystem(int motorCANID, boolean inverted, int lowerLimitChannel) {
+    
+    m_lowerLimit = new DigitalInput(lowerLimitChannel);
+
     m_motor = new SparkMax(motorCANID, MotorType.kBrushless);
     m_closedLoopController = m_motor.getClosedLoopController();
     m_encoder = m_motor.getEncoder();
 
-    m_lowerLimit = new DigitalInput(lowerLimitChannel);
+    m_configuration = MotorConfigurations.climbCamMotorConfig;
+    m_configuration.inverted(inverted);
 
-    // Store the configuration parameters in the SparkMax
-    m_config = new SparkMaxConfig();
-    // We set the SparkMax controllers to use NEO Brushless Motors using the REV Hardware client, so we won't adjust the things here.
-    m_config.encoder.positionConversionFactor(1).velocityConversionFactor(1);
 
-    m_config.closedLoop
-      // Set the feedback sensor as the primary encoder
-      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      // Position PID constants. Set to slot 0 be default
-      .p(Constants.ClimbConstants.positionPID[0])
-      .i(Constants.ClimbConstants.positionPID[1])
-      .d(Constants.ClimbConstants.positionPID[2])
-      .outputRange(-1, 1)
-      // Velocity PID constants. Set to slot 1
-      .p(Constants.ClimbConstants.velocityPID[0], ClosedLoopSlot.kSlot1)
-      .i(Constants.ClimbConstants.velocityPID[1], ClosedLoopSlot.kSlot1)
-      .d(Constants.ClimbConstants.velocityPID[2], ClosedLoopSlot.kSlot1)
-      .velocityFF(Constants.ClimbConstants.velocityPID[3], ClosedLoopSlot.kSlot1)
-      .outputRange(-1, 1);
-
-    // Apply the configuration to the SparkMax. Because we are setting all configuraion options here, we don't persist the parameters.
-    m_motor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters); 
-
-    if (inverted)
-      m_direction = -1;
-    else 
-      m_direction = 1;
+    // Apply the configuration to the SparkMax. Because we are setting all relevant configuraion options here, we don't persist the parameters.
+    // We are also tacking on the inversion of the motor.
+    m_motor.configure(m_configuration, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters); 
   }
 
 
@@ -101,9 +82,12 @@ public class ClimbCamSubsystem extends SubsystemBase {
   }
 
   public void raiseCam() {
+    // Angle is in degrees, so we convert to rotations and convert that using the gear ratio.
+    double target = (Constants.ClimbConstants.totalCamTravelAngle / 360)/ Constants.ClimbConstants.gearRatio;
+    //TODO Make it obey the max speed setting
     m_isDown = false;
     m_closedLoopController.setReference(
-      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * -m_direction * Constants.ClimbConstants.camRaiseSpeed) + m_zeroPoint, 
+      target + m_zeroPoint, 
       ControlType.kPosition, 
       ClosedLoopSlot.kSlot0);
     // This will be set to true although the motor has not yet reached that position.
@@ -113,20 +97,23 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public void lowerCam() {
     m_isUp = false;
     m_closedLoopController.setReference(
-      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * m_direction * Constants.ClimbConstants.camLowerSpeed) - m_zeroPoint, 
+      (Constants.ClimbConstants.totalCamTravelAngle / Constants.ClimbConstants.gearRatio * Constants.ClimbConstants.camLowerSpeed) - m_zeroPoint, 
       ControlType.kPosition, 
       ClosedLoopSlot.kSlot0);
     // This will be set to true although the motor has not yet reached that position.
     m_isDown = true;
   }
   
+//TODO Invextigate MaxMotion for velocity based control
   public void zeroCam() {
     // Prevent starting zeroing if already in progress
     if (m_isMoving) 
       return;  
 
     m_isMoving = true;
-    m_closedLoopController.setReference(0.1 * m_direction, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+
+    // Make it velocity controlled and set the reference to 10% speed.
+    m_closedLoopController.setReference(0.1, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     // Once the limit switch activates, continue.
     new WaitUntilCommand(m_lowerLimit::get).andThen(() -> {
       m_closedLoopController.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
