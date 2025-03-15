@@ -1,6 +1,4 @@
-Fixed bugs in the cam movement methods
+Added debug help and ready for master-repo merge
 
 Changes:
-- Fixed bug in lowerCam() and raiseCam() methods.
-- Added smart current limiting to the climb motor configuration
-- Cleaned up example code in the files derived from the ExampleSubsystem
+- Added println() statements to lowerCam(), raiseCam(), zeroCam(), and MotorConfigurations().

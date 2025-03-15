@@ -69,6 +69,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   }
 
   public void raiseCam() {
+    System.out.println("Raising Cam " + m_motor.getDeviceId());
     // Angle is in degrees, so we convert to rotations and convert that using the gear ratio.
     double target = (Constants.ClimbConstants.totalCamTravelAngle / 360) / Constants.ClimbConstants.gearRatio;
     //TODO Make it obey the max speed setting. That can probably be done with the volage that is added on after all the calculations
@@ -80,6 +81,8 @@ public class ClimbCamSubsystem extends SubsystemBase {
 
   //FIXME Make like raise cam function
   public void lowerCam() {
+    System.out.println("Lowering Cam " + m_motor.getDeviceId());
+
     m_isUp = false;
     m_closedLoopController.setReference(m_zeroPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     //FIXME This will be set to true although the motor has not yet reached that position.
@@ -88,6 +91,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   
 //TODO Investigate MaxMotion for velocity based control
   public void zeroCam() {
+    System.out.println("Zeroing Cam" + m_motor.getDeviceId() + "...");
     // Prevent starting zeroing if already in progress
     if (m_isMoving) 
       return;  

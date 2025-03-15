@@ -17,6 +17,7 @@ public final class MotorConfigurations {
   /** Initialize the motor configurations. If this isn't done, default configurations will be applied. */
   public static void init() {
     if (m_instance == null) {
+      System.out.println("Initializing Motor Configurations...");
       m_instance = new MotorConfigurations();
     }
     
