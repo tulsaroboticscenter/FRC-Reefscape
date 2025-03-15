@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - Score Coral1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - Retrieve Coral2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - Score Coral2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - Retreive Coral3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - Score Coral3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
