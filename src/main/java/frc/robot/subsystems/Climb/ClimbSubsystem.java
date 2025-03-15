@@ -17,8 +17,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
-    rightCam = new ClimbCamSubsystem(DeviceID.rightClimbCamCAN, DeviceID.rightClimbCamLimitSwitchDIO, ClimbConstants.rightCamInverted);
-    leftCam = new ClimbCamSubsystem(DeviceID.leftClimbCamCAN, DeviceID.leftClimbCamLimitSwitchDIO, ClimbConstants.leftCamInverted);
+    rightCam = new ClimbCamSubsystem(DeviceID.RIGHT_CLIMB_CAM_CAN, DeviceID.RIGHT_CLIMB_CAM_LIMIT_SWITCH_DIO, ClimbConstants.RIGHT_CAM_INVERTED);
+    leftCam = new ClimbCamSubsystem(DeviceID.LEFT_CLIMB_CAM_CAN, DeviceID.LEFT_CLIMB_CAM_LIMIT_SWITCH_DIO, ClimbConstants.LEFT_CAM_INVERTED);
   }
 
   public void toggleClimb() {
