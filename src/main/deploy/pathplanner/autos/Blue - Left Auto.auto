@@ -33,6 +33,12 @@
           "data": {
             "pathName": "Blue - Score Coral3"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
         }
       ]
     }

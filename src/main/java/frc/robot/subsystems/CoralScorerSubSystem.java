@@ -31,6 +31,10 @@ public class CoralScorerSubSystem extends SubsystemBase {
     return false;
   }
 
+  public void resetCoralScorer(){
+
+  }
+
   public void loadCoralScorer(){
 
   }

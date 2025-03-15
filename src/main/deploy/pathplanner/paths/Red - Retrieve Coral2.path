@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.802690562682656
+    "rotation": 53.80269056268266
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Red Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 60.20945378922889

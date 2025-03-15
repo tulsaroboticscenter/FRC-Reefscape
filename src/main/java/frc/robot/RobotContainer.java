@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CoralScorerSubSystem;
 import frc.robot.subsystems.Climb.ClimbSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CommandSwerveDrivetrain;
@@ -62,8 +64,25 @@ public class RobotContainer {
   public RobotContainer() {
     MotorConfigurations.init();
 
-    autoChooser = AutoBuilder.buildAutoChooser("Tests");
+    // For convenience a programmer could change this when going to competition.
+    boolean isCompetition = true;
+
+//    autoChooser = AutoBuilder.buildAutoChooser("Tests");
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    // As an example, this will only show autos that start with "comp" while at
+    // competition as defined by the programmer
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      (stream) -> isCompetition
+        ? stream.filter(auto -> auto.getName().startsWith("comp"))
+        : stream
+    );
     SmartDashboard.putData("Auto Mode", autoChooser);
+
+
+    // Register Named Commands
+//    NamedCommands.registerCommand("resetCoralScorer", CoralScorerSubSystem.resetCoralScorer());
+//    NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+//    NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
 
     configureBindings();
     // Zero the climb
