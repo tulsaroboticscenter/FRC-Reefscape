@@ -1,5 +1,5 @@
-Update License and README
+Changed constants formatting
 
 Changes:
-- Updated README
-- Updated License
+- Reformatted climb constants to be uppercase with underscores and updated their references.
+- Deleted old placeholder code from Constants.java
