@@ -37,8 +37,8 @@ public class RobotContainer {
   // Climb stuff
   private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
 
-  private static final XboxController m_driverController = new XboxController(OperatorConstants.driverControllerPort);
-  private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, OperatorConstants.toggleClimb);
+  private static final XboxController m_driverController = new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, OperatorConstants.TOGGLE_CLIMB);
 
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
