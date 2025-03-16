@@ -37,8 +37,19 @@ public class RobotContainer {
   // Climb stuff
   private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem();
 
+  // Coral scoring system
+  private final CoralScorerSubSystem m_CoralSubsystem = new CoralScorerSubSystem();
+
+  private final CommandXboxController joystick = new CommandXboxController(0);
+
   private static final XboxController m_driverController = new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  private static final XboxController s_mechanismsController = new XboxController(OperatorConstants.MECHANISMS_CONTROLLER_PORT);
   private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, OperatorConstants.TOGGLE_CLIMB);
+  private final JoystickButton intakeCoralButton = new JoystickButton(s_mechanismsController, OperatorConstants.INTAKE_CORAL);
+  private final JoystickButton scoreCoralLowButton = new JoystickButton(s_mechanismsController, OperatorConstants.SCORE_CORAL_LOW);
+  private final JoystickButton scoreCoralMidButton = new JoystickButton(s_mechanismsController, OperatorConstants.SCORE_CORAL_MID);
+  private final JoystickButton scoreCoralHighButton = new JoystickButton(s_mechanismsController, OperatorConstants.SCORE_CORAL_HIGH);
+//  private final joystickButton coralExtensionControl = new JoystickButton(s_mechanismsController, OperatorConstants.EXTEND_CORAL_SCORER);
 
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -54,7 +65,6 @@ public class RobotContainer {
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private final CommandXboxController joystick = new CommandXboxController(0);
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -120,6 +130,11 @@ public class RobotContainer {
 
     /* Toggle the climb */
     toggleClimbButton.onTrue(new InstantCommand(() -> {m_ClimbSubsystem.toggleClimb();}));
+
+    /* Control Coral Extension */
+    toggleClimbButton.onTrue(new InstantCommand(() -> {m_CoralSubsystem.resetCoralScorer();();}));
+
+
   }
 
   public Command getAutonomousCommand() {

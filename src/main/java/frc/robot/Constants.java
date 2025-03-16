@@ -30,8 +30,17 @@ public final class Constants
 
     /** This is the port of the driver Controller */
     public static final int DRIVER_CONTROLLER_PORT  = 0;
+    public static final int MECHANISMS_CONTROLLER_PORT  = 1;
     /** This is the button to toggle the climb */
     public static final int TOGGLE_CLIMB = XboxController.Button.kX.value;
+
+    /** Button Controls for the Coral Scoring System */
+    public static final int INTAKE_CORAL = XboxController.Button.kA.value;
+    public static final int SCORE_CORAL_LOW = XboxController.Button.kB.value;
+    public static final int SCORE_CORAL_MID = XboxController.Button.kX.value;
+    public static final int SCORE_CORAL_HIGH = XboxController.Button.kY.value;
+    public static final double EXTEND_CORAL_SCORER = XboxController.Button.kLeftStick.value;
+    public static final double ANGLE_CORAL_SCORER = XboxController.Button.kRightStick.value;
 
     // Joystick Deadband
     public static final double LEFT_X_DEADBAND  = 0.1;
@@ -42,19 +51,21 @@ public final class Constants
   }
 
   
-  // public static class CoralScorerConstants{
-  //   public static final int m_EXTENSION_CAN_ID = 40;
-  //   public static final int m_CORAL_ANGLE_CAN_ID = 41;
-  //   public static final double EXTENSION_POWER = 0.5;
-  //   public static final double ANGLE_POWER = 0.2;
-  // }
+  public static class CoralScorerConstants{
+    public static final int m_EXTENSION_CAN_ID = 40;
+    public static final int m_CORAL_ANGLE_CAN_ID = 41;
+    public static final double EXTENSION_POWER = 0.5;
+    public static final double ANGLE_POWER = 0.2;
+    /** This is the position PID controller for the coral extension motor. Proportinal, Integral, Derivative */
+    public static final double[] CORAL_EXTENSION_POSITION_PID = {0.1, 0, 0};
+    /** This is the velocity PID controller for the Coral extension motor. Proportinal, Integral, Derivative, velocityFF */
+    public static final double[] CORAL_EXTENSION_VELOCITY_PID = {0.001, 0, 0, 1.0 / 473};
+    /** This is the position PID controller for the coral angle motor. Proportinal, Integral, Derivative */
+    public static final double[] CORAL_ANGLE_POSITION_PID = {0.1, 0, 0};
+    /** This is the velocity PID controller for the cams. Proportinal, Integral, Derivative, velocityFF */
+    public static final double[] CORAL_ANGLE_VELOCITY_PID = {0.001, 0, 0, 1.0 / 473};
+  }
 
-  // public static class ClimbConstants{
-  //   public static final int m_CLIMB_LEFT_CAN_ID = 42;
-  //   public static final int m_CLIMB_RIGHT_CAN_ID = 43;
-  //   public static final double CLIMB_POWER = .6;
-  //   public static final double CLIMB_UP_POWER = .3;
-  // }
 
   public static final class ClimbConstants {
     /** Determine if the motors are inverted */
