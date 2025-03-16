@@ -114,4 +114,13 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public boolean isMoving() { return m_isMoving; }
   public boolean isDown() { return m_isDown; }
   public boolean isUp() { return m_isUp; }
+
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    // Tell motor to go to the target encoder position
+    // Make sure the motor is shut off when the limit switch is pressed
+  }
+
 }
