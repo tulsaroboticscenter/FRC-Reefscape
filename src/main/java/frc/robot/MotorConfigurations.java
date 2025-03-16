@@ -29,15 +29,15 @@ public final class MotorConfigurations {
       // Set the feedback sensor as the primary encoder
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Position PID constants. Set to slot 0 be default
-      .p(Constants.ClimbConstants.POSITION_PID[0])
-      .i(Constants.ClimbConstants.POSITION_PID[1])
-      .d(Constants.ClimbConstants.POSITION_PID[2])
+      .p(ClimbConstants.CLIMB_POSITION_PID[0])
+      .i(ClimbConstants.CLIMB_POSITION_PID[1])
+      .d(ClimbConstants.CLIMB_POSITION_PID[2])
       .outputRange(-1, 1)
       // Velocity PID constants. Set to slot 1
-      .p(Constants.ClimbConstants.VELOCITY_PID[0], ClosedLoopSlot.kSlot1)
-      .i(Constants.ClimbConstants.VELOCITY_PID[1], ClosedLoopSlot.kSlot1)
-      .d(Constants.ClimbConstants.VELOCITY_PID[2], ClosedLoopSlot.kSlot1)
-      .velocityFF(Constants.ClimbConstants.VELOCITY_PID[3], ClosedLoopSlot.kSlot1)
+      .p(ClimbConstants.CLIMB_VELOCITY_PID[0], ClosedLoopSlot.kSlot1)
+      .i(ClimbConstants.CLIMB_VELOCITY_PID[1], ClosedLoopSlot.kSlot1)
+      .d(ClimbConstants.CLIMB_VELOCITY_PID[2], ClosedLoopSlot.kSlot1)
+      .velocityFF(ClimbConstants.CLIMB_VELOCITY_PID[3], ClosedLoopSlot.kSlot1)
       .outputRange(-1, 1);
 
     climbCamMotorConfig

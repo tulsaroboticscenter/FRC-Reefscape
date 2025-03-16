@@ -71,7 +71,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
   public void raiseCam() {
     System.out.println("Raising Cam " + m_motor.getDeviceId());
     // Angle is in degrees, so we convert to rotations and convert that using the gear ratio.
-    double target = (Constants.ClimbConstants.TOTAL_CAM_TRAVEL_ANGLE / 360) / Constants.ClimbConstants.GEAR_RATIO;
+    double target = (ClimbConstants.CLIMB_TOTAL_TRAVEL_ANGLE / 360) / Constants.ClimbConstants.CLIMB_GEAR_RATIO;
     //TODO Make it obey the max speed setting. That can probably be done with the volage that is added on after all the calculations
     m_isDown = false;
     m_closedLoopController.setReference(m_zeroPoint - target, ControlType.kPosition, ClosedLoopSlot.kSlot0);
@@ -99,7 +99,7 @@ public class ClimbCamSubsystem extends SubsystemBase {
     m_isMoving = true;
 
     // Make it velocity controlled and set the reference to the zeroing speed.
-    m_closedLoopController.setReference(ClimbConstants.CAM_ZERO_SPEED, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+    m_closedLoopController.setReference(ClimbConstants.CLIMB_ZERO_SPEED, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     // Once the limit switch activates, continue.
     new WaitUntilCommand(m_lowerLimit::get).andThen(() -> {
       m_closedLoopController.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot1);

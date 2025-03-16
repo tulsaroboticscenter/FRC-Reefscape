@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.DeviceID;;
+import frc.robot.Constants.DeviceID;
 
 public class ClimbSubsystem extends SubsystemBase {
 
@@ -17,8 +17,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
-    rightCam = new ClimbCamSubsystem(DeviceID.RIGHT_CLIMB_CAM_CAN, DeviceID.RIGHT_CLIMB_CAM_LIMIT_SWITCH_DIO, ClimbConstants.RIGHT_CAM_INVERTED);
-    leftCam = new ClimbCamSubsystem(DeviceID.LEFT_CLIMB_CAM_CAN, DeviceID.LEFT_CLIMB_CAM_LIMIT_SWITCH_DIO, ClimbConstants.LEFT_CAM_INVERTED);
+    rightCam = new ClimbCamSubsystem(DeviceID.m_RIGHT_CLIMB_CANID, DeviceID.ls_RIGHT_CLIMB_DIO, ClimbConstants.CLIMB_RIGHT_INVERTED);
+    leftCam = new ClimbCamSubsystem(DeviceID.m_LEFT_CLIMB_CANID, DeviceID.ls_LEFT_CLIMB_DIO, ClimbConstants.CLIMB_LEFT_INVERTED);
   }
 
   public void toggleClimb() {
