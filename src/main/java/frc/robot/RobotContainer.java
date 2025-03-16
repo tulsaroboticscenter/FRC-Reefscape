@@ -40,8 +40,6 @@ public class RobotContainer {
   // Coral scoring system
   private final CoralScorerSubSystem m_CoralSubsystem = new CoralScorerSubSystem();
 
-  private final CommandXboxController joystick = new CommandXboxController(0);
-
   private static final XboxController m_driverController = new XboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
   private static final XboxController s_mechanismsController = new XboxController(OperatorConstants.MECHANISMS_CONTROLLER_PORT);
   private final JoystickButton toggleClimbButton = new JoystickButton(m_driverController, OperatorConstants.TOGGLE_CLIMB);
@@ -65,6 +63,7 @@ public class RobotContainer {
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
+  private final CommandXboxController joystick = new CommandXboxController(0);
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -132,7 +131,7 @@ public class RobotContainer {
     toggleClimbButton.onTrue(new InstantCommand(() -> {m_ClimbSubsystem.toggleClimb();}));
 
     /* Control Coral Extension */
-    toggleClimbButton.onTrue(new InstantCommand(() -> {m_CoralSubsystem.resetCoralScorer();();}));
+    toggleClimbButton.onTrue(new InstantCommand(() -> {m_CoralSubsystem.resetCoralScorer();}));
 
 
   }
