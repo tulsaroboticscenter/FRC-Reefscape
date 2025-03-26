@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
  * class should not be used for any other purpose. All constants should be declared globally (i.e. public static). Do
  * not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>It is advised to statically import this class (or one of its inner  classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -21,19 +21,19 @@ public final class Constants {
 
     public static final class ElevatorSetpoints {
       public static final double kFeederStation = 0;
-      public static final double kLevel1 = 7;
-      public static final double kLevel2 = 20;
-      public static final double kLevel3 = 7;
-      public static final double kLevel4 = 60;
+      public static final double kLevel1 = -35;
+      public static final double kLevel2 = -100;
+      public static final double kLevel3 = -0;
+      public static final double kLevel4 = -180;
       public static final double scoreOffset = 2;
     }
 
     public static final class ArmSetpoints {
       public static final double kFeederStation = 0;
-      public static final double kLevel1 = 7.25;
-      public static final double kLevel2 = 14;
-      public static final double kLevel3 = 16;
-      public static final double kLevel4 = 10;
+      public static final double kLevel1 = 0;
+      public static final double kLevel2 = 10;
+      public static final double kLevel3 = 10;
+      public static final double kLevel4 = 4.5;
       public static final double scoreOffset = 1;
     }
 
@@ -85,14 +85,14 @@ public final class Constants {
 
     public static final class LeftClimbSetpoints {
       public static final double kLevel1 = 0;
-      public static final double kLevel2 = -20;
+      public static final double kLevel2 = 35;
       public static final double kLevel3 = 2;
       public static final double kLevel4 = 3;
     }
 
     public static final class RightClimbSetpoints {
       public static final double kLevel1 = 0;
-      public static final double kLevel2 = 20;
+      public static final double kLevel2 = -35;
       public static final double kLevel3 = 2;
       public static final double kLevel4 = 3;
     }

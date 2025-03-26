@@ -28,8 +28,8 @@ public final class Configs {
           .outputRange(-1, 1)
           .maxMotion
           // Set MAXMotion parameters for position control
-          .maxVelocity(500)
-          .maxAcceleration(500)
+          .maxVelocity(1000)
+          .maxAcceleration(1000)
           .allowedClosedLoopError(0.25);
 
       // Configure basic settings of the elevator motor
@@ -68,7 +68,7 @@ public final class Configs {
 
     static {
       // Configure basic settings of the arm motor
-      climbConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+      climbConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(60).voltageCompensation(12);
 
       /*
        * Configure the closed loop controller. We want to make sure we set the
@@ -87,7 +87,7 @@ public final class Configs {
           .allowedClosedLoopError(0.25);
 
       // Configure basic settings of the elevator motor
-      climbConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20).voltageCompensation(12);
+      climbConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(60).voltageCompensation(12);
 
       /*
        * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
