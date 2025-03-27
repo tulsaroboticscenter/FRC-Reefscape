@@ -12,28 +12,52 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 public class DriverUI extends Command {
 
   // Make sure there is only one instance of this.
   private static DriverUI m_instance;
-  public static synchronized void init(boolean isCompetition) {
+  public static synchronized void init() {
     if (m_instance == null) {
-      m_instance = new DriverUI(isCompetition);
+      m_instance = new DriverUI();
     }
   }
-  public static DriverUI instance() { return m_instance; }
+  public static DriverUI instance() { 
+    init();
+    return m_instance; 
+  }
 
   private ShuffleboardTab m_driverTab;
   private SendableChooser<Command> m_autoChooser;
   boolean m_isCompetition;
 
-  private DriverUI(boolean isCompetition){
+  // For testing
+  // private SendableChooser<Command> testingChooser;
+
+  private DriverUI(){
+
+    m_isCompetition = false;
+
     m_driverTab = Shuffleboard.getTab("Driver");
     Shuffleboard.selectTab("Driver");
 
+    m_autoChooser = new SendableChooser<>();
+
     CameraInit();
     AutosInit();
+
+    // Testing only
+    // testingChooser.addDefaultOption("Defualt Option", new Command());
+    // testingChooser.addOption("First Option", new InstantCommand());
+
+    // m_driverTab.add("Testing Chooser", testingChooser)
+    //            .withWidget(BuiltInWidgets.kComboBoxChooser)
+    //            .withSize(1, 1)
+    //            .withPosition(5, 3);
   };
+
+  public void setCompetitionMode(boolean isCompetition) { m_isCompetition = isCompetition; }
 
   private void CameraInit() {
     CameraServer.startAutomaticCapture();
@@ -43,6 +67,8 @@ public class DriverUI extends Command {
   }
 
   private void AutosInit() {
+
+    //FIXME This does not work with Shuffleboard.
     // Build an auto chooser. This will use Commands.none() as the default option.
     // As an example, this will only show autos that start with "comp" while at
     // competition as defined by the programmer
@@ -53,10 +79,10 @@ public class DriverUI extends Command {
     );
 
     // m_driverTab.putData("Auto Chooser", m_autoChooser);
-    m_driverTab.add("Auto Chooser", m_autoChooser)
+    m_driverTab.add("Autonomous Chooser", m_autoChooser)
                .withWidget(BuiltInWidgets.kComboBoxChooser)
                .withPosition(5, 0)
-               .withSize(1, 1);
+               .withSize(2, 1);
   }
 
   public Command getAutonomousCommand() {

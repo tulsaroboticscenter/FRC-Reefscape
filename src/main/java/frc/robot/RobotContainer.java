@@ -56,8 +56,9 @@ public class RobotContainer {
         // For convenience a programmer could change this when going to competition.
         boolean isCompetition = true;
 
-        DriverUI.init(isCompetition);
         configureBindings();
+
+        DriverUI.instance().setCompetitionMode(isCompetition);
     }
 
     private void configureBindings() {
