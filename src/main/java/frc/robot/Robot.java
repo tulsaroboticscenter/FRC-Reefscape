@@ -33,18 +33,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
-//    CameraServer.getInstance().startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
   }
 
 
   @Override
   public void robotPeriodic() {
-    // Display data from SPARK onto the dashboard
-    CommandScheduler.getInstance().run(); 
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -58,7 +54,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = DriverUI.instance().getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

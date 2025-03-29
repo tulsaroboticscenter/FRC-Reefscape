@@ -50,15 +50,27 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    public final SendableChooser<Command> autoChooser;
+
 
     public RobotContainer() {
 
         // For convenience a programmer could change this when going to competition.
-        boolean isCompetition = true;
+        boolean inCompetition = true;
+
+
+        // Build an auto chooser. This will use Commands.none() as the default option.
+        // As an example, this will only show autos that start with "comp" while at
+        // competition as defined by the programmer
+        autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+            (stream) -> inCompetition
+            ? stream.filter(auto -> auto.getName().startsWith("Comp"))
+            : stream
+        );
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
 
         configureBindings();
-
-        DriverUI.instance().setCompetitionMode(isCompetition);
     }
 
     private void configureBindings() {
@@ -106,5 +118,9 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
     }
 }
