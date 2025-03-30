@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Configs.AlgaeSubsystem;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -31,6 +31,7 @@ import frc.robot.subsystems.ClimbSubsystem.ClimbSetpoints;
 public class RobotContainer {
     private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
     private final ClimbSubsystem m_climbSubSystem = new ClimbSubsystem();
+    // private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed

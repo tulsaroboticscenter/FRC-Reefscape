@@ -3,6 +3,9 @@ package frc.robot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import frc.robot.Constants.AlgaeSubsystemConstants;
+
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -86,9 +89,6 @@ public final class Configs {
           .maxAcceleration(6000)
           .allowedClosedLoopError(0.25);
 
-      // Configure basic settings of the elevator motor
-      climbConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(60).voltageCompensation(12);
-
       /*
        * Configure the reverse limit switch for the elevator. By enabling the limit switch, this
        * will prevent any actuation of the elevator in the reverse direction if the limit switch is
@@ -107,7 +107,7 @@ public final class Configs {
 
     static {
       // Configure basic setting of the arm motor
-      armConfig.smartCurrentLimit(20);
+      armConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20).voltageCompensation(12);
 
       /*
        * Configure the closed loop controller. We want to make sure we set the
@@ -121,8 +121,15 @@ public final class Configs {
           .p(0.1)
           .outputRange(-0.5, 0.5);
 
+
       // Configure basic settings of the intake motor
       intakeConfig.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+
+      intakeConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(0.1)
+        .outputRange(-0.5, 0.5);
     }
   }
 }
