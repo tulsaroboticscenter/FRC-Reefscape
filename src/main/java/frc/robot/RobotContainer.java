@@ -110,7 +110,7 @@ public class RobotContainer {
         joystick2.start().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kFeederStation));
 
         joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
-        joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
+//        joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
 //        joystick2.leftStick().value(m_climbSubSystem.set)
 
 
