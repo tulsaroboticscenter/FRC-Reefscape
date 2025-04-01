@@ -2,34 +2,36 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+// import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+// import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.wpilibj.RobotController;
+// import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+// import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+// import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Configs;
-import frc.robot.Constants.SimulationRobotConstants;
+// import frc.robot.Constants.SimulationRobotConstants;
 import frc.robot.Constants.AlgaeSubsystemConstants.AlgaePivotSetpoints;
-import frc.robot.Constants.ClimbSubsystemConstants.LeftClimbSetpoints;
-import frc.robot.Constants.ClimbSubsystemConstants.RightClimbSetpoints;
-import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.AlgaeSubsystemConstants.AlgaeRollerSpeeds;
+// import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.AlgaeSubsystemConstants;
-import frc.robot.Constants.ClimbSubsystemConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
   /** Subsystem-wide setpoints */
-  public enum AlgaeSetpoints {
-    kLevel1,
-    kLevel2,
+  public enum AlgaeStates {
+    kUp,
+    kDown,
+    kRetracted,
+    kIntaking,
+    kOuttaking
   }
 
 
@@ -45,7 +47,8 @@ public class AlgaeSubsystem extends SubsystemBase {
   private SparkClosedLoopController algaeRollerController = algaeRollerMotor.getClosedLoopController();
   private RelativeEncoder algaeRollerEncoder = algaeRollerMotor.getEncoder();
 
-  private double pivotPositionTarget = AlgaePivotSetpoints.kLevel1;
+  private double pivotPositionTarget = AlgaePivotSetpoints.kRetracted;
+  private double rollerVelocityTarget = 0.0;
 
   /*
   // Simulation information
@@ -101,57 +104,40 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   }
   
-  private void moveToSetpoint () {
-
+  /**
+   * Drive the arm and elevator motors to their respective setpoints. This will use MAXMotion
+   * position control which will allow for a smooth acceleration and deceleration to the mechanisms'
+   * setpoints.
+   */
+  private void moveToSetpoint() {
+    algaePivotController.setReference(pivotPositionTarget, ControlType.kMAXMotionPositionControl);
+    algaeRollerController.setReference(rollerVelocityTarget, ControlType.kMAXMotionVelocityControl);
   }
   
-
-  // /**
-  //  * Drive the arm and elevator motors to their respective setpoints. This will use MAXMotion
-  //  * position control which will allow for a smooth acceleration and deceleration to the mechanisms'
-  //  * setpoints.
-  //  */
-  // private void moveToSetpoint() {
-  //   rightClimbController.setReference(rightClimbCurrentTarget, ControlType.kMAXMotionPositionControl);
-  //   leftClimbController.setReference(leftClimbCurrentTarget, ControlType.kMAXMotionPositionControl);
-  // }
-
-  // /** Zero the elevator encoder when the limit switch is pressed. */
-  // private void zeroElevatorOnLimitSwitch() {
-  //   if (!wasResetByLimit && leftClimbMotor.getReverseLimitSwitch().isPressed()) {
-  //     // Zero the encoder only when the limit switch is switches from "unpressed" to "pressed" to
-  //     // prevent constant zeroing while pressed
-  //     leftClimbEncoder.setPosition(0);
-  //     wasResetByLimit = true;
-  //   } else if (!leftClimbMotor.getReverseLimitSwitch().isPressed()) {
-  //     wasResetByLimit = false;
-  //   }
-  // }
-
-  // /** Zero the arm and elevator encoders when the user button is pressed on the roboRIO. */
-  // private void zeroOnUserButton() {
-  //   if (!wasResetByButton && RobotController.getUserButton()) {
-  //     // Zero the encoders only when button switches from "unpressed" to "pressed" to prevent
-  //     // constant zeroing while pressed
-  //     wasResetByButton = true;
-  //     leftClimbEncoder.setPosition(0);
-  //     rightClimbEncoder.setPosition(0);
-  //   } else if (!RobotController.getUserButton()) {
-  //     wasResetByButton = false;
-  //   }
-  // }
-
   /**
    * Command to set the subsystem setpoint. This will set the arm and elevator to their predefined
    * positions for the given setpoint.
    */
-  public Command setSetpointCommand(AlgaeSetpoints climbSetpoint) {
+  public Command setStateCommand(AlgaeStates algaeState) {
     return this.runOnce(
         () -> {
-          switch (climbSetpoint) {
-            case kLevel1:
+          switch (algaeState) {
+            case kDown:
+              pivotPositionTarget = AlgaeSubsystemConstants.AlgaePivotSetpoints.kDown;
               break;
-            case kLevel2:
+            case kUp:
+              pivotPositionTarget = AlgaeSubsystemConstants.AlgaePivotSetpoints.kUp;
+              break;
+            case kRetracted:
+              pivotPositionTarget = AlgaeSubsystemConstants.AlgaePivotSetpoints.kRetracted;
+              break;
+            case kIntaking:
+              pivotPositionTarget = AlgaeSubsystemConstants.AlgaePivotSetpoints.kDown;
+              rollerVelocityTarget = AlgaeSubsystemConstants.AlgaeRollerSpeeds.kIntaking;
+              break;
+            case kOuttaking:
+              pivotPositionTarget = AlgaeSubsystemConstants.AlgaePivotSetpoints.kDown;
+              rollerVelocityTarget = AlgaeSubsystemConstants.AlgaeRollerSpeeds.kOuttaking;
               break;
           }
         });
@@ -160,15 +146,15 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-  //   moveToSetpoint();
+    moveToSetpoint();
   //   zeroElevatorOnLimitSwitch();
   //   zeroOnUserButton();
 
-  //   // Display subsystem values
-  //   SmartDashboard.putNumber("Coral/Arm/Target Position", leftClimbCurrentTarget);
-  //   SmartDashboard.putNumber("Coral/Arm/Actual Position", leftClimbEncoder.getPosition());
-  //   SmartDashboard.putNumber("Coral/Elevator/Target Position", rightClimbCurrentTarget);
-  //   SmartDashboard.putNumber("Coral/Elevator/Actual Position", rightClimbEncoder.getPosition());
+    // Display subsystem values
+    SmartDashboard.putNumber("Algae/Arm/Target Position", pivotPositionTarget);
+    SmartDashboard.putNumber("Algae/Arm/Actual Position", algaePivotEncoder.getPosition());
+    SmartDashboard.putNumber("Algae/Roller/Target velocity", rollerVelocityTarget);
+    SmartDashboard.putNumber("Algae/Roller/Actual velocity", algaeRollerEncoder.getPosition());
 
   //   // Update mechanism2d
   //   m_elevatorMech2d.setLength(
@@ -186,7 +172,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   //       );
   }
 
-  // @Override
-  // public void simulationPeriodic() {
-  // }
+  @Override
+  public void simulationPeriodic() {
+  }
 }

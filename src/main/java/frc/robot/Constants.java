@@ -101,6 +101,7 @@ public final class Constants {
   }
 
   public static final class AlgaeSubsystemConstants {
+    //TODO These are placeholder CANIDs
     public static final int kPivotMotorCanId = 63;
     public static final int kRollerMotorCanId = 62;
 
@@ -109,12 +110,16 @@ public final class Constants {
 
     public static final class AlgaePivotSetpoints {
       // In degrees
-      public static final double kLevel1 = 0;
-      public static final double kLevel2 = 0;
-      public static final double kLevel3 = 0;
+      public static final double kUp = 0;         // The intake is up and carrying algae
+      public static final double kDown = 0;       // The intake is down and ready to intake algae
+      public static final double kRetracted = 0;  // The intake is retracted completely over the bumpers
     }
 
-
+    public static final class AlgaeRollerSpeeds {
+      // In rotations per minute
+      public static final double kIntaking = 15.0;
+      public static final double kOuttaking = 15.0;
+    }
   }
 
   public static final class AlgaeConstants {
@@ -128,8 +133,6 @@ public final class Constants {
     public static final double kIz = 0.1;
     public static final double kMinOutput = 0.1;
     public static final double kMaxOutput = 0.1;
-
-    
   }
 
   public static final class Electrical {
@@ -167,6 +170,4 @@ public final class Constants {
     public static final double kIntakeLongBarLength = 0.3048;
     public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
   }
-
-  
 }
