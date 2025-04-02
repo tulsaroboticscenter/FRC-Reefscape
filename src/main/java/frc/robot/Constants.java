@@ -84,6 +84,7 @@ public final class Constants {
     public static final int kRightClimbMotorCanId = 26;   // Test CANID 28 => Actual CANID 26
 
     public static final class LeftClimbSetpoints {
+      // In degrees
       public static final double kLevel1 = 0;
       public static final double kLevel2 = 35;
       public static final double kLevel3 = 2;
@@ -91,42 +92,35 @@ public final class Constants {
     }
 
     public static final class RightClimbSetpoints {
+      // In degrees
       public static final double kLevel1 = 0;
       public static final double kLevel2 = -35;
       public static final double kLevel3 = 2;
       public static final double kLevel4 = 3;
     }
-
   }
 
-  // public static final class ClimbSubsystemConstants {
-  //   /** This is for the SparkMax of the left cam */
-  //   public static final int m_LEFT_CLIMB_CANID = 26;
-  //   /** This is for the SparkMax of the right cam */
-  //   public static final int m_RIGHT_CLIMB_CANID = 21;
+  public static final class AlgaeSubsystemConstants {
+    //TODO These are placeholder CANIDs
+    public static final int kPivotMotorCanId = 63;
+    public static final int kRollerMotorCanId = 62;
 
-  //   /** Determine if the motors are inverted */
-  //   public static final boolean CLIMB_LEFT_INVERTED = false, CLIMB_RIGHT_INVERTED = false;
+    /** This is used to determine when an algae ball is taken in. */
+    public static final double kRollerStallTorque = 1.0;
 
-  //   /** This is the difference between the angle of the fully deployed cams and the angle of the fully retracted cams. */
-  //   public static final double CLIMB_TOTAL_TRAVEL_ANGLE  = 120;
-  //   /** This is how many revolutions the cam makes for one revolution of the motor. */
-  //   public static final double CLIMB_GEAR_RATIO = 1.0/80;
+    public static final class AlgaePivotSetpoints {
+      // In degrees
+      public static final double kUp = 0;         // The intake is up and carrying algae
+      public static final double kDown = 0;       // The intake is down and ready to intake algae
+      public static final double kRetracted = 0;  // The intake is retracted completely over the bumpers
+    }
 
-  //   /** EXPERIMENTAL Between 0 and 1. This is the speed the cam motors should raise at. */
-  //   public static final double CLIMB_RAISE_SPEED = 1.0;
-  //   /** EXPERIMENTAL Between 0 and 1. This is the speed the cam motors should lower at. */
-  //   public static final double CLIMB_LOWER_SPEED = 1.0;
-  //   /** Between 0 and 1. This is the speed the cam motors will run while zeroing. */
-  //   public static final double CLIMB_ZERO_SPEED = 0.1;
-
-  //   /** This is the position PID controller for the cams. Proportinal, Integral, Derivative */
-  //   public static final double[] CLIMB_POSITION_PID = {0.1, 0, 0};
-  //   // Reference for FF: https://docs.revrobotics.com/revlib/spark/closed-loop/closed-loop-control-getting-started
-  //   /** This is the velocity PID controller for the cams. Proportinal, Integral, Derivative, velocityFF */
-  //   public static final double[] CLIMB_VELOCITY_PID = {0.001, 0, 0, 1.0 / 473};
-
-  // }
+    public static final class AlgaeRollerSpeeds {
+      // In rotations per minute
+      public static final double kIntaking = 15.0;
+      public static final double kOuttaking = 15.0;
+    }
+  }
 
   public static final class AlgaeConstants {
     public static final double kSVolts = 0.1;
@@ -139,8 +133,6 @@ public final class Constants {
     public static final double kIz = 0.1;
     public static final double kMinOutput = 0.1;
     public static final double kMaxOutput = 0.1;
-
-    
   }
 
   public static final class Electrical {
@@ -149,18 +141,7 @@ public final class Constants {
     /** The NEO 550 current range is 20A – 40A */
     public static final int NEO550_CURRENT_LIMIT = 20;
   }
-
-  public static final class DeviceID {
-
-    /** This is for the SparkMax of the right cam */
-//    public static final int m_TEST_MOTOR_CANID = 21;
-
-    // TWO DEVICES MUST NEVER BE SET TO THE SAME DIO PORT. THAT CAUSES A CRASH.
-    /** This is the DIO port of the left cam limit switch. */
-    public static final int ls_LEFT_CLIMB_DIO = 0;
-    /** This is the DIO port of the left cam limit switch. */
-    public static final int ls_RIGHT_CLIMB_DIO = 1;
-  }
+  
 
   public static final class SimulationRobotConstants {
     public static final double kPixelsPerMeter = 20;
@@ -189,6 +170,4 @@ public final class Constants {
     public static final double kIntakeLongBarLength = 0.3048;
     public static final double kIntakeBarAngleRads = Units.degreesToRadians(-60);
   }
-
-  
 }

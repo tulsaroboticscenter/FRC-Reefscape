@@ -17,20 +17,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
 
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem.AlgaeStates;
+
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem.ClimbSetpoints;
 
 
 public class RobotContainer {
     private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
     private final ClimbSubsystem m_climbSubSystem = new ClimbSubsystem();
+    private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -112,6 +115,10 @@ public class RobotContainer {
         joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
 //        joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
 //        joystick2.leftStick().value(m_climbSubSystem.set)
+
+        // Algae manipulator control
+        joystick2.leftBumper().onTrue(m_AlgaeSubsystem.setStateCommand(AlgaeStates.kIntaking));
+        joystick2.leftTrigger().onTrue(m_AlgaeSubsystem.setStateCommand(AlgaeStates.kOuttaking));
 
 
         // reset the field-centric heading on left bumper press
