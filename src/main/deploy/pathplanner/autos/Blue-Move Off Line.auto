@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red - Move Off Line"
+            "pathName": "Blue-Move Off Line"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Blue Autos",
   "choreoAuto": false
 }
