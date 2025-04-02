@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red - Right Score Coral on Reef"
+            "pathName": "Blue-Right Side Score on Reef"
           }
         },
         {
@@ -25,13 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right-Turn Around"
+            "pathName": "Blue-Right Side Turn Around"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Red Autos",
+  "folder": "Blue Autos",
   "choreoAuto": false
 }

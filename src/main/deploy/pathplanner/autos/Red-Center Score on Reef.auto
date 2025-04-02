@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red-Center Score on Reef"
+            "pathName": "Blue-Center Score on Reef"
           }
         },
         {
@@ -25,13 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red-Center Turn Around"
+            "pathName": "Blue-Center Turn Around"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Red Autos",
+  "folder": "Blue Autos",
   "choreoAuto": false
 }
