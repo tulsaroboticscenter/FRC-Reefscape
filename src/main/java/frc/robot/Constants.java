@@ -19,29 +19,16 @@ public final class Constants {
     public static final int kElevatorMotorCanId = 22;
     public static final int kArmMotorCanId = 33;
 
-    public static final class ElevatorSetpoints {
-      public static final double kFeederStation = 0;
-      public static final double kLevel1 = -35;
-      public static final double kLevel2 = -100;
-      public static final double kLevel3 = -0;
-      public static final double kLevel4 = -180;
-      public static final double scoreOffset = 2;
-    }
-
     public static final class ArmSetpoints {
-      public static final double kFeederStation = 0;
-      public static final double kLevel1 = 0;
-      public static final double kLevel2 = 10;
-      public static final double kLevel3 = 10;
-      public static final double kLevel4 = 4.5;
-      public static final double scoreOffset = 1;
+      // In degrees. Up is 0, down is how far the arm should pivot.
+      public static final double kUp = 0.0;
+      public static final double kDown = 20.0; 
     }
 
-    public static final class ArmLimits{
-      public static final double maxLimit = 18;
-      public static final double minLimit = 0;
+    public static final double maxSpeed = 1000;
 
-    }
+
+    public static final double gearRatio = 60.0;
 
   }
 

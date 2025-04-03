@@ -31,9 +31,9 @@ import frc.robot.subsystems.ClimbSubsystem.ClimbSetpoints;
 
 
 public class RobotContainer {
-    //private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
+    private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
     private final ClimbSubsystem m_climbSubSystem = new ClimbSubsystem();
-    //private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
+    // private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
 
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -61,19 +61,22 @@ public class RobotContainer {
         // For convenience a programmer could change this when going to competition.
         boolean inCompetition = true;
 
+        configureBindings();
+        // algaeBindings();
+        coralBindings();
+        climbBindings();
 
         // Build an auto chooser. This will use Commands.none() as the default option.
         // As an example, this will only show autos that start with "comp" while at
         // competition as defined by the programmer
         autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
             (stream) -> inCompetition
-            ? stream.filter(auto -> auto.getName().startsWith(""))
+            ? stream.filter(auto -> auto.getName().startsWith("Comp"))
             : stream
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        configureBindings();
     }
 
     private void configureBindings() {
@@ -99,32 +102,37 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        // A Button -> Elevator/Arm to level 1 position
-        //joystick2.a().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel1));
-
-        // B Button -> Elevator/Arm to level 2 position
-        //joystick2.b().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel2));
-
-        // X Button -> Elevator/Arm to level 3 position
-        // joystick2.x().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel3));
-
-        // Y Button -> Elevator/Arm to level 4 position
-        // joystick2.y().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kLevel4));
-        // joystick2.start().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kFeederStation));
-
-        joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
-//        joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
-//        joystick2.leftStick().value(m_climbSubSystem.set)
-
-        // Algae manipulator control
-        // joystick2.leftBumper().onTrue(m_AlgaeSubsystem.setStateCommand(AlgaeStates.kIntaking));
-        // joystick2.leftTrigger().onTrue(m_AlgaeSubsystem.setStateCommand(AlgaeStates.kOuttaking));
-
-
+        
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    /*
+    private void algaeBindings() {
+        // Algae manipulator control
+        joystick2.leftBumper().onTrue(m_algaeSubsystem.setStateCommand(AlgaeStates.kIntaking));
+        joystick2.leftTrigger().onTrue(m_algaeSubsystem.setStateCommand(AlgaeStates.kOuttaking));
+    }
+    */
+
+    private void coralBindings() {
+
+        // A Button -> Elevator/Arm to level 1 position
+        joystick2.a().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kDown));
+        joystick2.b().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
+
+        // joystick2.start().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
+
+    }
+
+    private void climbBindings() {
+
+        joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
+        // joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
+        // joystick2.leftStick().value(m_climbSubSystem.set)
+
     }
 
     public Command getAutonomousCommand() {
