@@ -32,8 +32,9 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ClimbSubsystem.ClimbSetpoints;
 
 
+
 public class RobotContainer {
-    private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
+    // private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
     private final ClimbSubsystem m_climbSubSystem = new ClimbSubsystem();
     //private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
@@ -84,9 +85,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(Math.copySign(Math.pow(-joystick.getLeftY(), 2), -joystick.getLeftY()) * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(Math.copySign(Math.pow(-joystick.getLeftX(), 2), -joystick.getLeftX()) * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(Math.copySign(Math.pow(-joystick.getRightX(), 2), -joystick.getRightX()) * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -109,8 +110,8 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // Coral arm
-        joystick2.a().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kDown));
-        joystick2.b().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
+        //joystick2.a().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kDown));
+        // joystick2.b().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
