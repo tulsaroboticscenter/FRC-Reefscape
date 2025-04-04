@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.XboxController;
 public final class Constants {
 
   public static final class CoralSubsystemConstants {
-    public static final int kElevatorMotorCanId = 22;
     public static final int kArmMotorCanId = 33;
 
     public static final class ArmSetpoints {

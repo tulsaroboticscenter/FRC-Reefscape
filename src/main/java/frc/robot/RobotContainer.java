@@ -17,11 +17,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.CoralSubsystemConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.CoralSubsystem.Setpoint;
+
 
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.AlgaeSubsystem.AlgaeStates;
@@ -33,7 +35,7 @@ import frc.robot.subsystems.ClimbSubsystem.ClimbSetpoints;
 public class RobotContainer {
     private final CoralSubsystem m_coralSubSystem = new CoralSubsystem();
     private final ClimbSubsystem m_climbSubSystem = new ClimbSubsystem();
-    // private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+    //private final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
 
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -61,22 +63,19 @@ public class RobotContainer {
         // For convenience a programmer could change this when going to competition.
         boolean inCompetition = true;
 
-        configureBindings();
-        // algaeBindings();
-        coralBindings();
-        climbBindings();
 
         // Build an auto chooser. This will use Commands.none() as the default option.
         // As an example, this will only show autos that start with "comp" while at
         // competition as defined by the programmer
         autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
             (stream) -> inCompetition
-            ? stream.filter(auto -> auto.getName().startsWith("Comp"))
+            ? stream.filter(auto -> auto.getName().startsWith(""))
             : stream
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
+        configureBindings();
     }
 
     private void configureBindings() {
@@ -102,37 +101,18 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        
+
+
+        joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
+
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
-    }
-
-    /*
-    private void algaeBindings() {
-        // Algae manipulator control
-        joystick2.leftBumper().onTrue(m_algaeSubsystem.setStateCommand(AlgaeStates.kIntaking));
-        joystick2.leftTrigger().onTrue(m_algaeSubsystem.setStateCommand(AlgaeStates.kOuttaking));
-    }
-    */
-
-    private void coralBindings() {
-
-        // A Button -> Elevator/Arm to level 1 position
+        // Coral arm
         joystick2.a().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kDown));
         joystick2.b().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
 
-        // joystick2.start().onTrue(m_coralSubSystem.setSetpointCommand(Setpoint.kUp));
-
-    }
-
-    private void climbBindings() {
-
-        joystick2.rightBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel2));
-        // joystick2.leftBumper().onTrue(m_climbSubSystem.setSetpointCommand(ClimbSetpoints.kLevel1));
-        // joystick2.leftStick().value(m_climbSubSystem.set)
-
+        drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {

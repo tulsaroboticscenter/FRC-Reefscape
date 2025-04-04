@@ -147,6 +147,9 @@ public class ClimbSubsystem extends SubsystemBase {
               leftClimbCurrentTarget = LeftClimbSetpoints.kLevel2;
               rightClimbCurrentTarget = RightClimbSetpoints.kLevel2;
               break;
+            default:
+              System.err.println("Climb setpoint not handled!");
+              break;
           }
         });
   }
