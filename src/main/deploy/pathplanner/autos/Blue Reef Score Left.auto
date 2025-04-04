@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red-Center Score on Reef"
+            "pathName": "RedP-Left Score on Reef"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red-Center Turn Around"
+            "pathName": "RedP-Left Turn Around"
           }
         }
       ]
